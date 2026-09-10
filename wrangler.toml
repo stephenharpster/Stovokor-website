@@ -8,9 +8,5 @@ binding = "ASSETS"
 html_handling = "none"
 not_found_handling = "none"
 
-[vars]
-TO_EMAIL = "info@stovokor.ai"
-FROM_EMAIL = "website@stovokor.ai"
-
-[[send_email]]
-name = "EMAIL"
+# Set WEB3FORMS_ACCESS_KEY as an encrypted secret on the Worker
+# (Settings → Variables and Secrets). Do not put the key in this file.

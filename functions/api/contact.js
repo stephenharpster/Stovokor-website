@@ -1,12 +1,5 @@
-// Cloudflare Pages Function — POST /api/contact
-// Deploy: this file's path IS the route.
-//
-// Production mail uses Cloudflare Email Sending (no third-party mail vendor).
-// After the domain is on Cloudflare DNS, onboard Email Sending and bind EMAIL
-// on the Pages/Worker project. Optional env vars:
-//   TO_EMAIL         info@stovokor.ai
-//   FROM_EMAIL       website@stovokor.ai
-//   ALLOWED_ORIGIN   https://www.stovokor.ai
+// POST /api/contact — forwarded to Web3Forms (free plan).
+// Set WEB3FORMS_ACCESS_KEY as an encrypted Worker secret.
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const LIMITS = { name: 120, email: 254, company: 160, message: 4000 };
@@ -78,22 +71,32 @@ export async function onRequestPost({ request, env }) {
   if (parsed.honeypot) return json({ ok: true });
   if (parsed.error) return json({ ok: false, error: parsed.error }, parsed.status);
 
-  const mail = buildEmail(parsed.fields);
-  const to = env.TO_EMAIL || 'info@stovokor.ai';
-  const from = env.FROM_EMAIL || 'website@stovokor.ai';
-
-  if (!env.EMAIL || typeof env.EMAIL.send !== 'function') {
+  if (!env.WEB3FORMS_ACCESS_KEY) {
     return json({ ok: false, error: 'Mail is not configured.' }, 503);
   }
 
+  const mail = buildEmail(parsed.fields);
+  const fields = parsed.fields;
+
   try {
-    await env.EMAIL.send({
-      to,
-      from,
-      replyTo: mail.reply_to,
-      subject: mail.subject,
-      text: mail.text,
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        access_key: env.WEB3FORMS_ACCESS_KEY,
+        subject: mail.subject,
+        name: fields.name,
+        email: fields.email,
+        company: fields.company,
+        message: mail.text,
+        replyto: fields.email,
+      }),
     });
+    const payload = await res.json().catch(function () { return {}; });
+    if (!res.ok || payload.success === false) {
+      console.error('mail send failed', payload);
+      return json({ ok: false, error: 'Mail send failed.' }, 502);
+    }
   } catch (err) {
     console.error('mail send failed', err && err.message ? err.message : err);
     return json({ ok: false, error: 'Mail send failed.' }, 502);
