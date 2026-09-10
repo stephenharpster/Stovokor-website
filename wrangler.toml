@@ -1,3 +1,7 @@
 name = "stovokor-website"
+main = "src/worker.js"
 compatibility_date = "2026-09-10"
-pages_build_output_dir = "."
+
+[assets]
+directory = "."
+binding = "ASSETS"
