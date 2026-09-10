@@ -428,14 +428,16 @@
     </div>
 
     <div>
-    <form id="contact-form" action="https://api.web3forms.com/submit" method="post">
+    <form id="contact-form" action="https://api.web3forms.com/submit" method="POST">
       <input type="hidden" name="access_key" value="d7c57630-eea6-43f4-857c-b604ffd0fb12" />
       <input type="hidden" name="from_name" value="Stovokor.ai" />
+      <input type="hidden" name="subject" value="Scoping request from stovokor.ai" />
+      <input type="hidden" name="redirect" value="https://www.stovokor.ai/?sent=1#contact" />
       <input type="text" name="name" placeholder="Name" required maxlength="120" autocomplete="name" />
       <input type="email" name="email" placeholder="Work email" required maxlength="254" autocomplete="email" />
       <input type="text" name="company" placeholder="Company / headcount" maxlength="160" autocomplete="organization" />
       <textarea name="message" rows="4" maxlength="4000" placeholder="Roughly how many systems are in the estate, and what is driving the timing?"></textarea>
-      <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" />
       <button type="submit">Submit Request</button>
     </form>
     <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
@@ -456,73 +458,16 @@
   document.getElementById('yr').textContent = new Date().getFullYear();
 
   var f = document.getElementById('contact-form');
-  var btn = f.querySelector('button');
   var status = document.getElementById('form-status');
-  var idle = btn.textContent;
-  function fail() {
-    btn.disabled = false;
-    f.setAttribute('data-busy', '0');
-    btn.textContent = idle;
-    status.classList.remove('is-success');
-    status.classList.add('is-error');
-    status.textContent = 'Send failed. Email info@stovokor.ai.';
+  if (/(?:^|[?&])sent=1(?:&|$)/.test(location.search)) {
+    status.classList.add('is-success');
+    status.textContent = 'Thank you for your request, we will get back to you soon.';
+    if (history.replaceState) history.replaceState(null, '', '/#contact');
   }
-  f.addEventListener('submit', function (e) {
-    e.preventDefault();
-    if (f.getAttribute('data-busy') === '1') return;
-    f.setAttribute('data-busy', '1');
-    btn.disabled = true;
-    btn.textContent = 'Sending…';
-    status.classList.remove('is-error', 'is-success');
-    status.textContent = '';
-    if (f.querySelector('[name="_gotcha"]').value) {
-      btn.disabled = false;
-      f.setAttribute('data-busy', '0');
-      btn.textContent = idle;
-      status.classList.add('is-success');
-      status.textContent = 'Thank you for your request, we will get back to you soon.';
-      return;
-    }
-    var payload = new URLSearchParams(new FormData(f));
-    var subject = 'Scoping request — ' + (payload.get('name') || 'website') + (payload.get('company') ? ' / ' + payload.get('company') : '');
-    payload.set('subject', subject);
-    var ac = new AbortController();
-    var timer = setTimeout(function () { ac.abort(); }, 15000);
-    fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        access_key: payload.get('access_key'),
-        from_name: payload.get('from_name'),
-        subject: subject,
-        name: payload.get('name'),
-        email: payload.get('email'),
-        company: payload.get('company') || '',
-        message: payload.get('message') || '',
-        replyto: payload.get('email')
-      }),
-      signal: ac.signal
-    })
-      .then(function (r) {
-        return r.json().then(function (body) { return { ok: r.ok && body.success !== false, body: body }; }).catch(function () { return { ok: r.ok, body: {} }; });
-      })
-      .then(function (res) {
-        clearTimeout(timer);
-        if (res.ok) {
-          f.reset();
-          btn.disabled = false;
-          f.setAttribute('data-busy', '0');
-          btn.textContent = idle;
-          status.classList.add('is-success');
-          status.textContent = 'Thank you for your request, we will get back to you soon.';
-          return;
-        }
-        fail();
-      })
-      .catch(function () {
-        clearTimeout(timer);
-        fail();
-      });
+  f.addEventListener('submit', function () {
+    var name = (f.querySelector('[name="name"]').value || '').trim();
+    var company = (f.querySelector('[name="company"]').value || '').trim();
+    f.querySelector('[name="subject"]').value = 'Scoping request — ' + (name || 'website') + (company ? ' / ' + company : '');
   });
 </script>
 </body>
