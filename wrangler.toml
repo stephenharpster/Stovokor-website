@@ -7,3 +7,10 @@ directory = "."
 binding = "ASSETS"
 html_handling = "none"
 not_found_handling = "none"
+
+[vars]
+TO_EMAIL = "info@stovokor.ai"
+FROM_EMAIL = "website@stovokor.ai"
+
+[[send_email]]
+name = "EMAIL"

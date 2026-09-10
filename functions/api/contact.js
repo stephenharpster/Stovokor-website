@@ -94,7 +94,8 @@ export async function onRequestPost({ request, env }) {
       subject: mail.subject,
       text: mail.text,
     });
-  } catch {
+  } catch (err) {
+    console.error('mail send failed', err && err.message ? err.message : err);
     return json({ ok: false, error: 'Mail send failed.' }, 502);
   }
   return json({ ok: true });
