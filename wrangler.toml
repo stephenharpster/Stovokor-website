@@ -1,13 +1,3 @@
-name = "stovokor-site"
+name = "stovokor-website"
 compatibility_date = "2026-09-10"
 pages_build_output_dir = "."
-
-# Cloudflare Email Sending — enable after stovokor.ai is on Cloudflare DNS.
-# Dashboard: Compute → Email Service → Email Sending → Onboard Domain.
-[[send_email]]
-name = "EMAIL"
-
-# Optional overrides in Pages → Settings → Environment variables:
-#   TO_EMAIL = info@stovokor.ai
-#   FROM_EMAIL = website@stovokor.ai
-#   ALLOWED_ORIGIN = https://www.stovokor.ai
