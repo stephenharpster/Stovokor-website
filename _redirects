@@ -1,0 +1,3 @@
+# Apex → www (canonical is https://www.stovokor.ai/).
+# Attach both hostnames to the Pages project, then this 301 fires.
+https://stovokor.ai/* https://www.stovokor.ai/:splat 301

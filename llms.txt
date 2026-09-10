@@ -1,0 +1,42 @@
+# Stovokor.ai
+
+> AI transition strategy for mid-market IT. Stovokor inventories a company's full technology estate, scores each system for AI-assisted rebuild, and delivers a sequenced, risk-mitigated conversion roadmap.
+
+Stovokor, LLC operates https://www.stovokor.ai/. Contact: info@stovokor.ai. Slogan: "Where costly SaaS goes to die." Audience: US companies with roughly 50–1,000 employees.
+
+## Offer
+
+Fixed-scope audits (typically 2–6 weeks) that produce an estate register, replaceability scorecard, conversion roadmap, financial model, and a 90-minute executive readout. No retainer is required after the audit. Pricing is scoped per estate after a 30-minute call.
+
+## Method
+
+1. Inventory (weeks 1–2) — purchased, homegrown, and shadow systems with owner, renewal, cost, integrations, and data gravity.
+2. Replaceability scoring (weeks 2–3) — rank what AI-assisted engineering can credibly reproduce; produce an explicit do-not-touch list.
+3. Sequenced roadmap (weeks 3–5) — conversion order, staffing, tooling, rollback, and cost vs staying put.
+4. First conversion (week 5+) — one production system built with the client's team as the reference implementation.
+
+## Services
+
+- Tech stack inventory
+- AI readiness assessment
+- Migration strategy roadmap
+- Hands-on AI-assisted software rebuild
+- Fractional CTO / advisory
+- Skills / capabilities assessment
+- Tooling selection
+- TCO analysis
+- Support, security, and monitoring operating model
+
+## Optional follow-on
+
+After the audit, work may continue as advisory, hands-on rebuild, or enablement so the client's own team executes. Engagements are run directly rather than staffed out.
+
+## Links
+
+- Home: https://www.stovokor.ai/
+- Method: https://www.stovokor.ai/#method
+- Services: https://www.stovokor.ai/#services
+- Engagement: https://www.stovokor.ai/#engagement
+- About: https://www.stovokor.ai/#about
+- Contact: https://www.stovokor.ai/#contact
+- Sitemap: https://www.stovokor.ai/sitemap.xml
