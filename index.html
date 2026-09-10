@@ -473,15 +473,19 @@
     btn.textContent = 'Sending…';
     status.classList.remove('is-error', 'is-success');
     status.textContent = '';
+    var ac = new AbortController();
+    var timer = setTimeout(function () { ac.abort(); }, 15000);
     fetch(f.action, {
       method: 'POST',
       headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(new FormData(f))
+      body: new URLSearchParams(new FormData(f)),
+      signal: ac.signal
     })
       .then(function (r) {
         return r.json().then(function (body) { return { ok: r.ok, body: body }; }).catch(function () { return { ok: r.ok, body: {} }; });
       })
       .then(function (res) {
+        clearTimeout(timer);
         if (res.ok) {
           f.reset();
           btn.disabled = false;
@@ -493,7 +497,10 @@
         }
         fail();
       })
-      .catch(fail);
+      .catch(function () {
+        clearTimeout(timer);
+        fail();
+      });
   });
 </script>
 </body>
